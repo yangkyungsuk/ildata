@@ -12,7 +12,10 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Tuple
 
 # UTF-8 인코딩 설정
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+try:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+except:
+    pass  # 이미 설정되어 있거나 가상환경에서 실행 중
 
 class IlwidaeBaseParser(ABC):
     """일위대가 파서 베이스 클래스"""
@@ -263,11 +266,15 @@ class IlwidaeBaseParser(ABC):
         if result is None:
             return None
         
+        # result 폴더 생성
+        import os
+        os.makedirs('result', exist_ok=True)
+        
         if output_file is None:
             # 기본 출력 파일명
             base_name = self.file_path.split('.')[0]
             sheet_name = self.sheet_name.replace(' ', '_').replace('/', '_')
-            output_file = f"{base_name}_{sheet_name}_unified.json"
+            output_file = f"result/{base_name}_{sheet_name}_unified.json"
         
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=2)

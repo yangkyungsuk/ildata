@@ -9,7 +9,10 @@ import json
 from datetime import datetime
 
 # UTF-8 인코딩 설정
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+try:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+except:
+    pass  # 이미 설정되어 있거나 가상환경에서 실행 중
 
 def run_parser(parser_module, parser_class):
     """개별 파서 실행"""

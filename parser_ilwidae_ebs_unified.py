@@ -9,7 +9,10 @@ import io
 from ilwidae_base_parser import IlwidaeBaseParser
 
 # UTF-8 인코딩 설정
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+try:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+except:
+    pass  # 이미 설정되어 있거나 가상환경에서 실행 중
 
 class IlwidaeEbsParser(IlwidaeBaseParser):
     """ebs.xls 일위대가 파서"""
@@ -153,7 +156,7 @@ def main():
     parser = IlwidaeEbsParser()
     
     # 파싱 및 저장
-    output_file = parser.save_to_json('ebs_ilwidae_unified.json')
+    output_file = parser.save_to_json()
     
     if output_file:
         print(f"\n✅ ebs.xls 일위대가 파싱 완료")
